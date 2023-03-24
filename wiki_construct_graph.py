@@ -3,7 +3,7 @@ import requests
 import re
 
 N = 1000
-root = "https://en.wikipedia.org/wiki/Complex_Systems"
+root = "https://en.wikipedia.org/wiki/Complex_System"
 prefix = "https://en.wikipedia.org"
 
 def extract_link_section(url):
@@ -55,8 +55,10 @@ def bfs(root):
     level_order = []
     while (len(level_order) < N):
         curr_url = queue.pop(0)
+        print(curr_url)
         level_order.append(curr_url)
         outlinks = extract_links(curr_url)
+        print(len(outlinks))
         for url in outlinks:
             if url not in vis:
                 vis.add(url)
@@ -79,8 +81,19 @@ def get_edges(nodes):
     return adj_matrix
 
 nodes = bfs(root)
+with open("nodes.txt", "w") as f:
+    for node in nodes:
+        f.write(node + '\n')
+
 matrix = get_edges(nodes)
-for i in range(N):
-    for j in range(N):
-        if matrix[i][j] == 1:
-            print(i, j)
+with open("edges.txt", "w") as f:
+    for i in range(N):
+        for j in range(N):
+            if matrix[i][j] == 1:
+                f.write("%d %d\n" % (i, j))
+
+with open("edges-labelled.txt", "w") as f:
+    for i in range(N):
+        for j in range(N):
+            if matrix[i][j] == 1:
+                f.write("%s %s\n" % (nodes[i], nodes[j]))
