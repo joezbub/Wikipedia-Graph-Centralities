@@ -1,10 +1,21 @@
 import numpy as np
 import requests
 import re
+from functools import lru_cache
 
 N = 1000
-root = "https://en.wikipedia.org/wiki/Complex_System"
-prefix = "https://en.wikipedia.org"
+root = 'https://en.wikipedia.org/wiki/Complex_system'
+prefix = 'https://en.wikipedia.org'
+
+@lru_cache
+def get_real_url(url):
+    r = requests.get(url)
+    s = r.text
+    link_section = re.search("<link rel=\"canonical\" href=\"(.*?)\"/>", s)
+    ret = link_section.group(1)
+    if "#" in ret:
+        ret = get_real_url(ret[:ret.index("#")])
+    return ret
 
 def extract_link_section(url):
     r = requests.get(url)
@@ -51,7 +62,7 @@ def extract_links(url):
 
 def bfs(root):
     queue = [root]
-    vis = set(root)
+    vis = set(queue)
     level_order = []
     while (len(level_order) < N):
         curr_url = queue.pop(0)
@@ -60,10 +71,10 @@ def bfs(root):
         outlinks = extract_links(curr_url)
         print(len(outlinks))
         for url in outlinks:
-            if url not in vis:
-                vis.add(url)
-                queue.append(url)
-
+            real_url = get_real_url(url)
+            if real_url != None and real_url not in vis:
+                vis.add(real_url)
+                queue.append(real_url)
     return level_order
 
 def get_edges(nodes):
@@ -76,8 +87,9 @@ def get_edges(nodes):
     for i in range(len(nodes)):
         outlinks = extract_links(nodes[i])
         for url in outlinks:
-            if url in node_to_index:
-                adj_matrix[i][node_to_index[url]] = 1
+            real_url = get_real_url(url)
+            if real_url in node_to_index:
+                adj_matrix[i][node_to_index[real_url]] = 1
     return adj_matrix
 
 nodes = bfs(root)
