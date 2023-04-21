@@ -108,18 +108,18 @@ def get_edges(nodes):
     return adj_matrix
 
 nodes = bfs(root)
-with open("nodes.txt", "w") as f:
+with open("data/nodes.txt", "w") as f:
     for node in nodes:
         f.write(node + '\n')
 
 matrix = get_edges(nodes)
-with open("edges.txt", "w") as f:
+with open("data/edges.txt", "w") as f:
     for i in range(N):
         for j in range(N):
             if matrix[i][j] == 1:
                 f.write("%d %d\n" % (i, j))
 
-with open("edges-labelled.txt", "w") as f:
+with open("data/edges-labelled.txt", "w") as f:
     for i in range(N):
         for j in range(N):
             if matrix[i][j] == 1:
