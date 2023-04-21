@@ -4,10 +4,6 @@
 
 Victor proposed this extra credit project to me after I expressed interest in working with the Wikipedia graph. I constructed the graph by conducting a BFS from a predetermined root (in this case https://en.wikipedia.org/wiki/Complex_system). The diedges were found by web scraping and extracting new links from the “See also” section of each page. After I grew the network to 1000 nodes, I computed the pagerank centrality for all 1000 nodes and plotted the subgraph of the top 100 ranked nodes with a color map associated with their pagerank centralities. I plotted the same subgraph for other centralities like eigen, katz, degree, betweenness, and closeness centralities computed on the original 1000 node graph.
 
-![instructions](images/instructions.png)
-
-Original directions from Victor
-
 
 ### Instructions
 
@@ -27,10 +23,17 @@ I first computed the centralities of the nodes in the graph across all the types
 
 The most difficult part here was implementing the node labeling on hover. This does not come with matplotlib or networkx, so I spent a lot of time searching for a solution.
 
-![instructions](images/pageranks.png)
+![pagerank](images/pagerank.png)
 
-![instructions](images/eigenvector.png)
+![eigenvector](images/eigenvector.png)
 
+![katz](images/katz.png)
+
+![degree](images/degree.png)
+
+![betweenness](images/betweenness.png)
+
+![closeness](images/closeness.png)
 
 ### Discussion
 
