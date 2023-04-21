@@ -10,6 +10,5 @@ def compute():
     edges, _ = get_graph()
     graph = nx.DiGraph()
     graph.add_edges_from(edges)
-    katz_centralities = nx.katz_centrality(graph)
-    return katz_centralities
-
+    closeness_centralities = nx.closeness_centrality(graph)
+    return closeness_centralities

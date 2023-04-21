@@ -9,6 +9,9 @@ prefix = 'https://en.wikipedia.org'
 
 @lru_cache
 def get_real_url(url):
+    """
+    Recursively requests url to get real url after redirects
+    """
     r = requests.get(url)
     s = r.text
     link_section = re.search("<link rel=\"canonical\" href=\"(.*?)\"/>", s)
@@ -18,6 +21,9 @@ def get_real_url(url):
     return ret
 
 def extract_link_section(url):
+    """
+    Find "See also" section of article in the HTML
+    """
     r = requests.get(url)
     s = r.text
 
@@ -43,6 +49,9 @@ def extract_link_section(url):
     return s
 
 def extract_links(url):
+    """
+    Extracts valid links in "See also" section of article
+    """
     section = extract_link_section(url)
     tmp = re.search("<a href=\"(.*?)\"", section)
     links = []
@@ -61,6 +70,9 @@ def extract_links(url):
     return links
 
 def bfs(root):
+    """
+    Run BFS until network is grown to 1000 nodes
+    """
     queue = [root]
     vis = set(queue)
     level_order = []
@@ -78,6 +90,9 @@ def bfs(root):
     return level_order
 
 def get_edges(nodes):
+    """
+    After nodes are found, extract links again to identify edges within desired graph
+    """
     adj_matrix = np.zeros((N, N))
     node_to_index = {}
     

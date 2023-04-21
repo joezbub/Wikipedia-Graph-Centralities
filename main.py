@@ -1,16 +1,20 @@
 import settings
 import numpy as np
 import networkx as nx
-import operator
 import matplotlib.pyplot as plt
 import mplcursors
 import wiki_degree_centrality as degree_centrality
 import wiki_pagerank_centrality as pagerank
 import wiki_eigen_centrality as eigen_centrality
 import wiki_katz_centrality as katz_centrality
+import wiki_betweenness_centrality as betweenness_centrality
+import wiki_closeness_centrality as closeness_centrality
 from wiki_read_graph import get_labels, get_graph
 
 def get_subgraph(edges, nodes):
+    """
+    Return subset of edges within subgraph
+    """
     subgraph_edges = []
     nodes = set(nodes)
     for edge in edges:
@@ -19,6 +23,9 @@ def get_subgraph(edges, nodes):
     return subgraph_edges
 
 def plot(graph, pos, all_centralities, title):
+    """
+    Plot subgraph for given centrality measure
+    """
     centralities = [all_centralities[node] for node in graph]
     max_centrality = max(centralities)
     centralities = [centrality / max_centrality for centrality in centralities] # normalize
@@ -33,11 +40,12 @@ def plot(graph, pos, all_centralities, title):
         node_name = list(graph.nodes)[node_index]
         text = labels[node_name] + " " + str(centralities[node_index])
         sel.annotation.set_text(text)
+        print(text)
 
     cursor = mplcursors.cursor(nodes, hover=True)
     cursor.connect('add', update_annot)
     ax = plt.gca()
-    ax.set_title(title)    
+    ax.set_title(title)
     plt.show()
 
 def get_degree_stats(matrix):
@@ -63,8 +71,10 @@ pageranks = pagerank.compute()
 eigen_centralities = eigen_centrality.compute()
 katz_centralities = katz_centrality.compute()
 degree_centralities = degree_centrality.compute()
+betweenness_centralities = betweenness_centrality.compute()
+closeness_centralities = closeness_centrality.compute()
 
-subgraph_nodes = sorted(pageranks, key=pageranks.get, reverse=True)[:settings.subgraph_size]
+subgraph_nodes = sorted(pageranks, key=pageranks.get, reverse=True)[:settings.subgraph_size] # 100 nodes with highest pageranks
 subgraph_edges = get_subgraph(edges, subgraph_nodes)
 
 graph = nx.DiGraph()
@@ -72,7 +82,9 @@ graph.add_nodes_from(subgraph_nodes)
 graph.add_edges_from(subgraph_edges)
 pos = nx.spring_layout(graph)
 
-plot(graph, pos, pageranks, title="Pageranks")
-plot(graph, pos, eigen_centralities, title="Eigenvector centralities")
+plot(graph.copy(), pos, pageranks, title="Pageranks")
+plot(graph.copy(), pos, eigen_centralities, title="Eigenvector centralities")
 plot(graph, pos, katz_centralities, title="Katz centralities")
 plot(graph, pos, degree_centralities, title="Degree centralities")
+plot(graph, pos, betweenness_centralities, title="Betweenness centralities")
+plot(graph, pos, closeness_centralities, title="Closeness centralities")

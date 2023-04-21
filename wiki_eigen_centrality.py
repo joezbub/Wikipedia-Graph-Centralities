@@ -8,9 +8,7 @@ import operator
 import scipy
 
 def compute():
-    edges, matrix = get_graph()
+    _, matrix = get_graph()
     _, vec = scipy.sparse.linalg.eigs(-matrix.transpose(), k = 1)
     normalizedVec = vec / sum(vec)
     return {k: v for k, v in enumerate(normalizedVec)}
-    
-
