@@ -1,20 +1,18 @@
-# Node Centralities in a Wikipedia Graph
+# Node Centralities in a Wikipedia Graph - NETS 3120
 
 ### Overview
 
 Victor proposed this extra credit project to me after I expressed interest in working with the Wikipedia graph. I constructed the graph by conducting a BFS from a predetermined root (in this case https://en.wikipedia.org/wiki/Complex_system). The diedges were found by web scraping and extracting new links from the “See also” section of each page. After I grew the network to 1000 nodes, I computed the pagerank centrality for all 1000 nodes and plotted the subgraph of the top 100 ranked nodes with a color map associated with their pagerank centralities. I plotted the same subgraph for other centralities like eigen, katz, degree, betweenness, and closeness centralities computed on the original 1000 node graph.
 
-
 ### Instructions
 
-Run `main.py`. Hover your mouse over a node to see its normalized centrality (max is 1) and the corresponding Wikipedia article.
+To view the plots, run `main.py`. Hover your mouse over a node to see its normalized centrality (max is 1) and the corresponding Wikipedia article. If the plots seem messy, try going fullscreen or changing the subgraph size from 100 to 50 in `settings.py`.
 
-If the plots seem messy, try going fullscreen or changing the subgraph size from 100 to 50 in `settings.py`.
-
+To construct a new graph, run `construct_graph.py`. You can change the graph size and the root on lines 6 and 7. Note that this takes a while to run.
 
 ### Graph Construction
 
-The code for this can be found in `wiki_construct_graph.py`. I set the root as a global variable on line 7, so to construct a graph rooted at a different page, just change this variable. In the BFS, after I pop a page from the queue, I make a HTTP request to the URL and use regex to find the links in the “See also” section. Coming up with heuristics to filter out bad links was difficult and took many iterations. For instance, some links seemed unique but they would redirect to an old article, so I had to recursively request to find the real underlying link. The output of the program can be found in nodes.txt, edges.txt, and edges-labelled.txt. 
+The code for this can be found in `construct_graph.py`. I set the root as a global variable on line 7, so to construct a graph rooted at a different page, just change this variable. In the BFS, after I pop a page from the queue, I make a HTTP request to the URL and use regex to find the links in the “See also” section. Coming up with heuristics to filter out bad links was difficult and took many iterations. For instance, some links seemed unique but they would redirect to an old article, so I had to recursively request to find the real underlying link. The output of the program can be found in the `data` folder.
 
 
 ### Graph Analytics
